@@ -13,6 +13,7 @@ export async function withApiError(handler: () => Promise<NextResponse> | NextRe
     return await handler();
   } catch (error) {
     const message = error instanceof Error ? error.message : "unexpected error";
-    return failure(message, 400);
+    const status = message === "unauthorized" ? 401 : 400;
+    return failure(message, status);
   }
 }

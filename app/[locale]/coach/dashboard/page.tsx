@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { ProgressBarChart } from "@/components/progress-bar-chart";
+import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 import { listMembers } from "@/lib/services/workspaceService";
 
@@ -10,9 +12,12 @@ function avg(values: number[]): number {
 
 export default async function CoachDashboard({ params }: { params: Promise<{ locale: string }> }) {
   ensureDemoData();
-  const workspaceId = getPrimaryWorkspaceId();
   const { locale } = await params;
+  const session = await requireRole(locale, "coach");
   const isHebrew = locale === "he";
+  const workspaceId =
+    repository.listWorkspaces().find((workspace) => workspace.coachId === session.userId)?.id ??
+    getPrimaryWorkspaceId();
 
   const athletes = listMembers(workspaceId).filter((member) => member.role === "athlete");
 
@@ -96,6 +101,15 @@ export default async function CoachDashboard({ params }: { params: Promise<{ loc
             </Link>
           </div>
         </section>
+
+        <ProgressBarChart
+          title={isHebrew ? "גרף התקדמות שחקנים" : "Player Progress Chart"}
+          emptyText={isHebrew ? "אין נתונים להצגה" : "No chart data available"}
+          data={athleteCards.map((athlete) => ({
+            label: athlete.name,
+            value: athlete.completionRate
+          }))}
+        />
       </section>
     </section>
   );

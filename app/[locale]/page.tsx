@@ -26,6 +26,24 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
           <p>{isHebrew ? "לוח אישי, משימות קרובות ומדדי התקדמות." : "Personal board, upcoming tasks, and progress metrics."}</p>
         </Link>
       </div>
+
+      <Link className="panel-link-card" href={`/${locale}/register`}>
+        <h3>{isHebrew ? "הרשמה למערכת" : "Register to the Platform"}</h3>
+        <p>
+          {isHebrew
+            ? "יצירת משתמש חדש, בחירת קבוצה ושמירה מאובטחת של פרטי התחברות."
+            : "Create a new user, choose a team, and store credentials securely."}
+        </p>
+      </Link>
+
+      <Link className="panel-link-card" href={`/${locale}/auth?role=coach`}>
+        <h3>{isHebrew ? "בדיקת מערכת מהירה" : "Quick System Test"}</h3>
+        <p>
+          {isHebrew
+            ? "כניסה למסך ההתחברות ושימוש בכפתור \"כניסה לבדיקת מערכת\"."
+            : "Open sign-in and use the \"System Test Login\" option."}
+        </p>
+      </Link>
     </section>
   );
 }

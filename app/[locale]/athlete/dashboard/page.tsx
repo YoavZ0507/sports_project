@@ -1,4 +1,6 @@
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { requireRole } from "@/lib/auth";
+import { ProgressBarChart } from "@/components/progress-bar-chart";
 import { listAthleteTasks } from "@/lib/services/taskService";
 import { listProgress } from "@/lib/services/progressService";
 import { repository } from "@/lib/repositories/inMemoryRepository";
@@ -11,10 +13,13 @@ function average(values: number[]): number {
 export default async function AthleteDashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   ensureDemoData();
   const { locale } = await params;
+  const session = await requireRole(locale, "athlete");
   const isHebrew = locale === "he";
 
-  const workspaceId = getPrimaryWorkspaceId();
-  const athleteId = "athlete_demo";
+  const athleteId = session.userId;
+  const workspaceId =
+    repository.listWorkspaces().find((workspace) => repository.getWorkspaceMembership(workspace.id, athleteId))?.id ??
+    getPrimaryWorkspaceId();
   const athlete = repository.getUser(athleteId);
   const assignments = listAthleteTasks(workspaceId, athleteId);
 
@@ -42,6 +47,11 @@ export default async function AthleteDashboardPage({ params }: { params: Promise
     metricKey,
     average: average(values),
     samples: values.length
+  }));
+
+  const completionOverTasks = assignments.map((entry) => ({
+    label: entry.task.title,
+    value: entry.assignment.status === "completed" ? 100 : entry.assignment.status === "in_progress" ? 60 : entry.assignment.status === "blocked" ? 20 : 0
   }));
 
   return (
@@ -96,6 +106,12 @@ export default async function AthleteDashboardPage({ params }: { params: Promise
           )}
         </div>
       </section>
+
+      <ProgressBarChart
+        title={isHebrew ? "גרף התקדמות משימות" : "Task Progress Chart"}
+        emptyText={isHebrew ? "אין משימות להצגת גרף" : "No tasks available for chart"}
+        data={completionOverTasks}
+      />
     </section>
   );
 }

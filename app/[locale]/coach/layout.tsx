@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { requireRole } from "@/lib/auth";
 
 export default async function CoachLayout({
   params,
@@ -8,6 +9,7 @@ export default async function CoachLayout({
   children: React.ReactNode;
 }) {
   const { locale } = await params;
+  await requireRole(locale, "coach");
   const isHebrew = locale === "he";
 
   return (

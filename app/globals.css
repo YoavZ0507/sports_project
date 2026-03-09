@@ -285,6 +285,14 @@ ul {
   font: inherit;
 }
 
+.auth-form select {
+  border: 1px solid #d4e6de;
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  background: #fff;
+}
+
 .rect-button {
   border: 1px solid #0f6f56;
   border-radius: 12px;
@@ -302,6 +310,56 @@ ul {
   transform: translateY(-2px);
   background: #10684f;
   box-shadow: 0 10px 24px rgba(16, 58, 45, 0.24);
+}
+
+.rect-button-secondary {
+  background: #ffffff;
+  color: var(--accent);
+  border-color: #d4e6de;
+}
+
+.rect-button-secondary:hover,
+.rect-button-secondary:focus-visible {
+  background: #f4fbf8;
+}
+
+.error-text {
+  margin: 0;
+  color: #ad2b2b;
+  font-weight: 600;
+}
+
+.chart-grid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.chart-row {
+  border: 1px solid #d4e6de;
+  border-radius: 12px;
+  padding: 0.65rem;
+  background: #fff;
+}
+
+.chart-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.chart-track {
+  height: 12px;
+  width: 100%;
+  background: #e8f2ed;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.chart-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #17a176 0%, #17785d 100%);
 }
 
 .athlete-dashboard-layout {
