@@ -54,6 +54,24 @@ export function ensureDemoData() {
     workspaceId: workspace.id,
     title: "Recovery Run",
     description: "30 minutes at low pace",
+    detailedInstructions:
+      "Warm up for 8 minutes, keep breathing controlled, then run 30 minutes in zone 2. Finish with 5-minute cooldown walk.",
+    resources: [
+      {
+        id: "res_demo_video_1",
+        name: "Recovery Run Technique Video",
+        type: "video",
+        url: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+        mimeType: "video/mp4"
+      },
+      {
+        id: "res_demo_text_1",
+        name: "Pacing Notes",
+        type: "text",
+        url: "data:text/plain;base64,UmVjb3ZlcnkgcnVuOiBrZWVwIHBhY2UgY29uc2VydmF0aXZlLCBkb24ndCBjcm9zcyBhbmFlcm9iaWMgem9uZS4=",
+        textPreview: "Recovery run: keep pace conservative, don't cross anaerobic zone."
+      }
+    ],
     scheduleType: "one_time",
     dueDate: "2026-03-10"
   });
@@ -64,6 +82,9 @@ export function ensureDemoData() {
     workspaceId: workspace.id,
     title: "Mobility Session",
     description: "Hip and ankle mobility routine",
+    detailedInstructions:
+      "3 rounds: hip openers 45s each side, ankle dorsiflexion drill 12 reps, deep squat hold 60s. Focus on quality over speed.",
+    resources: [],
     scheduleType: "recurring",
     recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,WE,FR"
   });

@@ -10,6 +10,8 @@ export function createTask(input: {
   workspaceId: string;
   title: string;
   description: string;
+  detailedInstructions?: string;
+  resources?: Task["resources"];
   scheduleType: Task["scheduleType"];
   dueDate?: string;
   recurrenceRule?: string;
@@ -23,6 +25,8 @@ export function createTask(input: {
     workspaceId: input.workspaceId,
     title: input.title,
     description: input.description,
+    detailedInstructions: input.detailedInstructions,
+    resources: input.resources ?? [],
     scheduleType: input.scheduleType,
     dueDate: input.dueDate,
     recurrenceRule: input.recurrenceRule,

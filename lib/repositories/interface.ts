@@ -23,6 +23,7 @@ export interface Repository {
   listWorkspaceMembers(workspaceId: string): WorkspaceMember[];
 
   createTask(task: Task): Task;
+  getTask(taskId: string): Task | undefined;
   updateTask(taskId: string, partial: Partial<Task>): Task | undefined;
   listTasks(workspaceId: string): Task[];
 

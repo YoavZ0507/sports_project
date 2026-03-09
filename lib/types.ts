@@ -2,6 +2,7 @@ export type Locale = "en" | "he";
 export type MembershipRole = "coach" | "athlete" | "pending";
 export type AssignmentStatus = "not_started" | "in_progress" | "completed" | "blocked";
 export type ScheduleType = "one_time" | "recurring";
+export type TaskResourceType = "video" | "text" | "file";
 
 export interface User {
   id: string;
@@ -30,12 +31,23 @@ export interface Task {
   workspaceId: string;
   title: string;
   description: string;
+  detailedInstructions?: string;
+  resources: TaskResource[];
   scheduleType: ScheduleType;
   dueDate?: string;
   recurrenceRule?: string;
   archived: boolean;
   createdBy: string;
   createdAt: string;
+}
+
+export interface TaskResource {
+  id: string;
+  name: string;
+  type: TaskResourceType;
+  url: string;
+  mimeType?: string;
+  textPreview?: string;
 }
 
 export interface TaskAssignment {

@@ -1,6 +1,7 @@
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
 import { requireRole } from "@/lib/auth";
 import { ProgressBarChart } from "@/components/progress-bar-chart";
+import Link from "next/link";
 import { listAthleteTasks } from "@/lib/services/taskService";
 import { listProgress } from "@/lib/services/progressService";
 import { repository } from "@/lib/repositories/inMemoryRepository";
@@ -78,12 +79,13 @@ export default async function AthleteDashboardPage({ params }: { params: Promise
         <h2>{isHebrew ? "משימות קרובות" : "Upcoming Tasks"}</h2>
         <div className="coach-athlete-list">
           {upcoming.map(({ task, assignment }) => (
-            <article key={assignment.id} className="panel-link-card static-card">
+            <Link key={assignment.id} className="panel-link-card" href={`/${locale}/athlete/tasks/${assignment.id}`}>
               <h3>{task.title}</h3>
               <p>{isHebrew ? "סטטוס" : "Status"}: {assignment.status}</p>
               <p>{isHebrew ? "תאריך יעד" : "Due date"}: {task.dueDate ?? (isHebrew ? "מחזורי" : "Recurring")}</p>
               <p>{task.description}</p>
-            </article>
+              <span className="card-action-text">{isHebrew ? "כניסה למשימה המפורטת" : "Open detailed task"}</span>
+            </Link>
           ))}
         </div>
       </section>

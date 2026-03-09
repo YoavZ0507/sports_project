@@ -1,23 +1,26 @@
+import { CoachTaskBuilder } from "@/components/coach-task-builder";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 
-export default function CoachTasksPage() {
+export default async function CoachTasksPage({ params }: { params: Promise<{ locale: string }> }) {
   ensureDemoData();
-  const workspaceId = getPrimaryWorkspaceId();
+  const { locale } = await params;
+  const session = await requireRole(locale, "coach");
+
+  const workspaceId =
+    repository.listWorkspaces().find((workspace) => workspace.coachId === session.userId)?.id ??
+    getPrimaryWorkspaceId();
+
+  const athletes = repository
+    .listWorkspaceMembers(workspaceId)
+    .filter((member) => member.role === "athlete")
+    .map((member) => ({
+      id: member.userId,
+      name: repository.getUser(member.userId)?.fullName ?? member.userId
+    }));
+
   const tasks = repository.listTasks(workspaceId);
 
-  return (
-    <section className="card">
-      <h2>Task Builder and Assignment Board</h2>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <strong>{task.title}</strong>
-            <span className="badge">{task.scheduleType}</span>
-            <p>{task.description}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+  return <CoachTaskBuilder locale={locale} workspaceId={workspaceId} athletes={athletes} existingTasks={tasks} />;
 }

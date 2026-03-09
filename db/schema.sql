@@ -32,6 +32,8 @@ create table if not exists tasks (
   workspace_id uuid not null references workspaces(id) on delete cascade,
   title text not null,
   description text,
+  detailed_instructions text,
+  resources jsonb not null default '[]'::jsonb,
   schedule_type schedule_type not null,
   due_date date,
   recurrence_rule text,

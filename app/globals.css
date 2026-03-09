@@ -285,6 +285,14 @@ ul {
   font: inherit;
 }
 
+.auth-form textarea {
+  border: 1px solid #d4e6de;
+  border-radius: 10px;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  resize: vertical;
+}
+
 .auth-form select {
   border: 1px solid #d4e6de;
   border-radius: 10px;
@@ -367,6 +375,61 @@ ul {
   gap: 1rem;
 }
 
+.coach-task-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.athlete-picker {
+  border: 1px solid #d4e6de;
+  border-radius: 12px;
+  padding: 0.8rem;
+  margin: 0;
+}
+
+.athlete-picker legend {
+  padding: 0 0.3rem;
+  font-weight: 700;
+}
+
+.athlete-check-grid {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.check-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.drop-zone {
+  border: 2px dashed #9cc9ba;
+  border-radius: 14px;
+  background: #f8fffb;
+  padding: 1rem;
+  display: grid;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+.file-label {
+  display: inline-block;
+  width: fit-content;
+  justify-self: center;
+}
+
+.resource-grid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.task-video {
+  width: 100%;
+  border-radius: 10px;
+  margin: 0.35rem 0 0.7rem;
+}
+
 @media (min-width: 920px) {
   .coach-dashboard-layout {
     grid-template-columns: 1.45fr 1fr;
@@ -384,5 +447,18 @@ ul {
 
   .athlete-dashboard-layout .coach-status-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .coach-task-layout {
+    grid-template-columns: 1.35fr 1fr;
+    align-items: start;
+  }
+
+  .athlete-check-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .resource-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

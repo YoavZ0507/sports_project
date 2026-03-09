@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getSessionFromHeaders } from "@/lib/auth";
 import { success, withApiError } from "@/lib/api";
+import { repository } from "@/lib/repositories/inMemoryRepository";
 import { listProgress, submitProgress } from "@/lib/services/progressService";
 
 const schema = z.object({
@@ -20,6 +21,15 @@ export async function POST(request: Request) {
   return withApiError(async () => {
     const session = await getSessionFromHeaders();
     const body = schema.parse(await request.json());
+    const assignment = repository.getAssignment(body.assignmentId);
+    if (!assignment) {
+      throw new Error("assignment not found");
+    }
+
+    if (session.role !== "athlete" || assignment.athleteId !== session.userId) {
+      throw new Error("unauthorized");
+    }
+
     return success(
       submitProgress({
         actorRole: session.role,
@@ -35,9 +45,27 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  return withApiError(() => {
+  return withApiError(async () => {
+    const session = await getSessionFromHeaders();
     const { searchParams } = new URL(request.url);
     const assignmentId = searchParams.get("assignmentId") ?? "";
+    const assignment = repository.getAssignment(assignmentId);
+    if (!assignment) {
+      throw new Error("assignment not found");
+    }
+
+    if (session.role === "athlete" && assignment.athleteId !== session.userId) {
+      throw new Error("unauthorized");
+    }
+
+    if (session.role === "coach") {
+      const task = repository.getTask(assignment.taskId);
+      const workspace = task ? repository.getWorkspace(task.workspaceId) : undefined;
+      if (!workspace || workspace.coachId !== session.userId) {
+        throw new Error("unauthorized");
+      }
+    }
+
     return success(listProgress(assignmentId));
   });
 }

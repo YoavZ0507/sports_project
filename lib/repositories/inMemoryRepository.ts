@@ -67,6 +67,10 @@ class InMemoryRepository implements Repository {
     return task;
   }
 
+  getTask(taskId: string): Task | undefined {
+    return this.tasks.get(taskId);
+  }
+
   updateTask(taskId: string, partial: Partial<Task>): Task | undefined {
     const current = this.tasks.get(taskId);
     if (!current) return undefined;
