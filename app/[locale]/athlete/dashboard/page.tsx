@@ -95,14 +95,6 @@ export default async function AthleteDashboardPage({ params }: { params: Promise
         </div>
       </section>
 
-      <Link className="panel-link-card" href={`/${locale}/athlete/team-metrics`}>
-        <h3>{isHebrew ? "מדדי קבוצה ודירוג אישי" : "Team Metrics and Personal Ranking"}</h3>
-        <p>
-          {isHebrew
-            ? "צפייה בדירוג שלך בכל מדד ביחס לקבוצה, ללא חשיפת ציונים פרטניים של אחרים."
-            : "View your ranking in each metric relative to the team, without exposing others' private scores."}
-        </p>
-      </Link>
     </section>
   );
 }

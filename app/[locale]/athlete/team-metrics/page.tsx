@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
 import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
@@ -73,9 +72,6 @@ export default async function AthleteTeamMetricsPage({ params }: { params: Promi
         );
       })}
 
-      <Link className="panel-link-card" href={`/${locale}/athlete/dashboard`}>
-        <h4>{isHebrew ? "חזרה ללוח שחקן" : "Back to Player Board"}</h4>
-      </Link>
     </section>
   );
 }

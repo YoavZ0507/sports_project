@@ -140,6 +140,12 @@ ul {
   background: #f8fffb;
 }
 
+.rect-nav-link-active {
+  border-color: var(--accent);
+  background: #eefaf5;
+  box-shadow: 0 8px 22px rgba(16, 58, 45, 0.1);
+}
+
 .landing {
   display: grid;
   gap: 1rem;

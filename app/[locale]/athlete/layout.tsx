@@ -1,4 +1,5 @@
 import { requireRole } from "@/lib/auth";
+import { AthleteTopNav } from "@/components/athlete-top-nav";
 
 export default async function AthleteLayout({
   params,
@@ -9,5 +10,10 @@ export default async function AthleteLayout({
 }) {
   const { locale } = await params;
   await requireRole(locale, "athlete");
-  return <section>{children}</section>;
+  return (
+    <section>
+      <AthleteTopNav locale={locale} />
+      {children}
+    </section>
+  );
 }
