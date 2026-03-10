@@ -430,6 +430,38 @@ ul {
   margin: 0.35rem 0 0.7rem;
 }
 
+.team-insights-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.metric-strip {
+  width: 100%;
+}
+
+.metric-strip-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.metric-strip-content {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.metric-link {
+  margin-top: 0.75rem;
+}
+
+.metric-score-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
 @media (min-width: 920px) {
   .coach-dashboard-layout {
     grid-template-columns: 1.45fr 1fr;
@@ -460,5 +492,10 @@ ul {
 
   .resource-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric-strip-content {
+    grid-template-columns: 1fr 1fr 1.4fr;
+    align-items: start;
   }
 }
