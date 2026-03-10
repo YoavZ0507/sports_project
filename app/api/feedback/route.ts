@@ -3,6 +3,7 @@ import { getSessionFromHeaders } from "@/lib/auth";
 import { success, withApiError } from "@/lib/api";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 import { addCoachFeedback, listFeedback } from "@/lib/services/progressService";
+import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 
 const schema = z.object({
   updateId: z.string().min(1),
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
     const assignment = repository.getAssignment(update.assignmentId);
     const task = assignment ? repository.getTask(assignment.taskId) : undefined;
     const workspace = task ? repository.getWorkspace(task.workspaceId) : undefined;
-    if (!workspace || session.role !== "coach" || workspace.coachId !== session.userId) {
+    if (!workspace || session.role !== "coach" || !isCoachInWorkspace(workspace.id, session.userId)) {
       throw new Error("unauthorized");
     }
 
@@ -54,7 +55,7 @@ export async function GET(request: Request) {
       throw new Error("unauthorized");
     }
 
-    if (session.role === "coach" && workspace.coachId !== session.userId) {
+    if (session.role === "coach" && !isCoachInWorkspace(workspace.id, session.userId)) {
       throw new Error("unauthorized");
     }
 

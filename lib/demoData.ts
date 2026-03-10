@@ -2,6 +2,7 @@ import { repository } from "@/lib/repositories/inMemoryRepository";
 import { createWorkspace, requestToJoinWorkspace, approveAthlete } from "@/lib/services/workspaceService";
 import { assignTask, createTask } from "@/lib/services/taskService";
 import { submitProgress, addCoachFeedback } from "@/lib/services/progressService";
+import { createCalendarEvent } from "@/lib/services/calendarService";
 import type { User } from "@/lib/types";
 
 let seeded = false;
@@ -146,6 +147,30 @@ export function ensureDemoData() {
     status: "blocked",
     note: "Right ankle stiffness after warmup.",
     metrics: [{ metricKey: "pain_level", metricValue: 4 }]
+  });
+
+  createCalendarEvent({
+    actorId: coach.id,
+    actorRole: "coach",
+    workspaceId: workspace.id,
+    title: "Morning Team Training",
+    description: "Speed work + tactical sequence rehearsal.",
+    eventType: "training",
+    startAt: "2026-03-12T07:00:00.000Z",
+    endAt: "2026-03-12T09:00:00.000Z",
+    location: "National Track"
+  });
+
+  createCalendarEvent({
+    actorId: coach.id,
+    actorRole: "coach",
+    workspaceId: workspace.id,
+    title: "League Match - Round 8",
+    description: "Home game, arrive 90 minutes before kickoff.",
+    eventType: "game",
+    startAt: "2026-03-14T17:30:00.000Z",
+    endAt: "2026-03-14T20:00:00.000Z",
+    location: "City Stadium"
   });
 
   seeded = true;

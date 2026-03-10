@@ -1,5 +1,6 @@
 import {
   CoachFeedback,
+  CalendarEvent,
   DashboardSummary,
   ProgressUpdate,
   Task,
@@ -38,6 +39,11 @@ export interface Repository {
 
   createFeedback(feedback: CoachFeedback): CoachFeedback;
   listFeedbackByUpdate(updateId: string): CoachFeedback[];
+
+  createCalendarEvent(event: CalendarEvent): CalendarEvent;
+  updateCalendarEvent(eventId: string, partial: Partial<CalendarEvent>): CalendarEvent | undefined;
+  getCalendarEvent(eventId: string): CalendarEvent | undefined;
+  listCalendarEvents(workspaceId: string): CalendarEvent[];
 
   getDashboardSummary(workspaceId: string, nowIso: string): DashboardSummary;
 

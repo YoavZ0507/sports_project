@@ -3,6 +3,7 @@ import { getSessionFromHeaders } from "@/lib/auth";
 import { success, withApiError } from "@/lib/api";
 import { assignTask, createTask, updateTask } from "@/lib/services/taskService";
 import { repository } from "@/lib/repositories/inMemoryRepository";
+import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 
 const createTaskSchema = z.object({
   workspaceId: z.string().min(1),
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
       throw new Error("workspace not found");
     }
 
-    if (session.role !== "coach" || workspace.coachId !== session.userId) {
+    if (session.role !== "coach" || !isCoachInWorkspace(body.workspaceId, session.userId)) {
       throw new Error("unauthorized");
     }
 
@@ -74,7 +75,7 @@ export async function PATCH(request: Request) {
     }
 
     const workspace = repository.getWorkspace(existingTask.workspaceId);
-    if (!workspace || session.role !== "coach" || workspace.coachId !== session.userId) {
+    if (!workspace || session.role !== "coach" || !isCoachInWorkspace(existingTask.workspaceId, session.userId)) {
       throw new Error("unauthorized");
     }
     return success(updateTask(body.taskId, { actorRole: session.role, archived: body.archived }));
@@ -93,7 +94,7 @@ export async function GET(request: Request) {
     }
 
     if (session.role === "coach") {
-      if (workspace.coachId !== session.userId) {
+      if (!isCoachInWorkspace(workspaceId, session.userId)) {
         throw new Error("unauthorized");
       }
       if (athleteIdParam) {

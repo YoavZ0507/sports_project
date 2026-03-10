@@ -1,6 +1,7 @@
 import { createId } from "@/lib/ids";
 import { requireCoach } from "@/lib/permissions";
 import { repository } from "@/lib/repositories/inMemoryRepository";
+import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 import type { Workspace, WorkspaceMember } from "@/lib/types";
 
 export function createWorkspace(input: { coachId: string; coachRole: "coach" | "athlete"; name: string }): Workspace {
@@ -47,9 +48,8 @@ export function approveAthlete(input: {
   actorRole: "coach" | "athlete";
 }): WorkspaceMember {
   requireCoach(input.actorRole);
-  const workspace = repository.getWorkspace(input.workspaceId);
-  if (!workspace || workspace.coachId !== input.actorId) {
-    throw new Error("forbidden: only workspace coach can approve");
+  if (!isCoachInWorkspace(input.workspaceId, input.actorId)) {
+    throw new Error("forbidden: only workspace coaching staff can approve");
   }
 
   const updated = repository.updateWorkspaceMemberRole(input.memberId, "athlete");

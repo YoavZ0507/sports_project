@@ -2,6 +2,7 @@
 create type membership_role as enum ('coach', 'athlete', 'pending');
 create type assignment_status as enum ('not_started', 'in_progress', 'completed', 'blocked');
 create type schedule_type as enum ('one_time', 'recurring');
+create type calendar_event_type as enum ('training', 'game', 'special');
 
 create table if not exists users (
   id uuid primary key,
@@ -77,4 +78,18 @@ create table if not exists coach_feedback (
   comment text not null,
   visibility text not null default 'athlete',
   created_at timestamptz not null default now()
+);
+
+create table if not exists calendar_events (
+  id uuid primary key,
+  workspace_id uuid not null references workspaces(id) on delete cascade,
+  title text not null,
+  description text,
+  event_type calendar_event_type not null,
+  start_at timestamptz not null,
+  end_at timestamptz not null,
+  location text,
+  created_by uuid not null references users(id),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );

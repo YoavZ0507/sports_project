@@ -1,5 +1,6 @@
 import { CoachTaskBuilder } from "@/components/coach-task-builder";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { getPrimaryCoachWorkspaceId } from "@/lib/workspaceAccess";
 import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 
@@ -9,7 +10,7 @@ export default async function CoachTasksPage({ params }: { params: Promise<{ loc
   const session = await requireRole(locale, "coach");
 
   const workspaceId =
-    repository.listWorkspaces().find((workspace) => workspace.coachId === session.userId)?.id ??
+    getPrimaryCoachWorkspaceId(session.userId) ??
     getPrimaryWorkspaceId();
 
   const athletes = repository

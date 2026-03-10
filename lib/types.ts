@@ -3,6 +3,7 @@ export type MembershipRole = "coach" | "athlete" | "pending";
 export type AssignmentStatus = "not_started" | "in_progress" | "completed" | "blocked";
 export type ScheduleType = "one_time" | "recurring";
 export type TaskResourceType = "video" | "text" | "file";
+export type CalendarEventType = "training" | "game" | "special";
 
 export interface User {
   id: string;
@@ -95,4 +96,18 @@ export interface DashboardSummary {
     actorId: string;
     message: string;
   }>;
+}
+
+export interface CalendarEvent {
+  id: string;
+  workspaceId: string;
+  title: string;
+  description?: string;
+  eventType: CalendarEventType;
+  startAt: string;
+  endAt: string;
+  location?: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
 }

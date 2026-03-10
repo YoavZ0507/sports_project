@@ -2,6 +2,7 @@ import { getSessionFromHeaders } from "@/lib/auth";
 import { success, withApiError } from "@/lib/api";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 import { getDashboard } from "@/lib/services/dashboardService";
+import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 
 export async function GET(request: Request) {
   return withApiError(async () => {
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
       throw new Error("workspace not found");
     }
 
-    if (session.role === "coach" && workspace.coachId !== session.userId) {
+    if (session.role === "coach" && !isCoachInWorkspace(workspaceId, session.userId)) {
       throw new Error("unauthorized");
     }
 

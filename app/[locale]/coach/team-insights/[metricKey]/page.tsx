@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { getPrimaryCoachWorkspaceId } from "@/lib/workspaceAccess";
 import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 import { getMetricSummaries } from "@/lib/metrics/teamMetricSummary";
@@ -16,7 +17,7 @@ export default async function MetricScoresPage({
   const isHebrew = locale === "he";
 
   const workspaceId =
-    repository.listWorkspaces().find((workspace) => workspace.coachId === session.userId)?.id ??
+    getPrimaryCoachWorkspaceId(session.userId) ??
     getPrimaryWorkspaceId();
   const metrics = getMetricSummaries(workspaceId);
   const decodedMetricKey = decodeURIComponent(metricKey);

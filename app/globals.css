@@ -436,6 +436,87 @@ ul {
   margin: 0.35rem 0 0.7rem;
 }
 
+.sync-url {
+  display: block;
+  width: 100%;
+  overflow-wrap: anywhere;
+  background: #f5faf7;
+  border: 1px solid #d9e9e2;
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+}
+
+.calendar-sync-actions {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.calendar-head {
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.86rem;
+  padding: 0.3rem 0;
+  color: var(--muted);
+}
+
+.calendar-cell {
+  min-height: 110px;
+  border: 1px solid #d4e6de;
+  border-radius: 10px;
+  padding: 0.45rem;
+  background: #fff;
+}
+
+.calendar-cell-empty {
+  background: #f8fbf9;
+}
+
+.calendar-day-number {
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.calendar-events {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.calendar-event-pill {
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calendar-event-training {
+  background: #e4f4ed;
+  color: #0d5d46;
+}
+
+.calendar-event-game {
+  background: #e6efff;
+  color: #1f4fa5;
+}
+
+.calendar-event-special {
+  background: #fff3df;
+  color: #986800;
+}
+
+.calendar-more {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
 .team-insights-layout {
   display: grid;
   gap: 1rem;
@@ -498,6 +579,10 @@ ul {
 
   .resource-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .calendar-sync-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .metric-strip-content {

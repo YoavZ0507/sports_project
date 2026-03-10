@@ -11,6 +11,7 @@ export interface Account {
   email: string;
   username: string;
   passwordHash: string;
+  calendarToken: string;
   role: Exclude<MembershipRole, "pending">;
   team: TeamName;
   locale: Locale;
@@ -47,6 +48,7 @@ function ensureDemoAccounts(): void {
     email: "coach.demo@system.local",
     username: "coach_demo",
     passwordHash: hashPassword("DemoPass123!"),
+    calendarToken: createSessionToken(),
     role: "coach",
     team: "Maccabi Tel Aviv",
     locale: "he"
@@ -58,6 +60,7 @@ function ensureDemoAccounts(): void {
     email: "athlete.demo@system.local",
     username: "athlete_demo",
     passwordHash: hashPassword("DemoPass123!"),
+    calendarToken: createSessionToken(),
     role: "athlete",
     team: "Maccabi Tel Aviv",
     locale: "he"
@@ -111,6 +114,7 @@ export function createAccount(input: {
     email,
     username,
     passwordHash: hashPassword(input.password),
+    calendarToken: createSessionToken(),
     role: input.role,
     team: assertTeam(input.team),
     locale: input.locale
@@ -134,6 +138,19 @@ export function createAccount(input: {
         coachRole: "coach",
         name: account.team
       });
+    } else {
+      const existingMembership = repository.getWorkspaceMembership(existingTeamWorkspace.id, account.userId);
+      if (!existingMembership) {
+        repository.createWorkspaceMember({
+          id: createId("member"),
+          workspaceId: existingTeamWorkspace.id,
+          userId: account.userId,
+          role: "coach",
+          createdAt: new Date().toISOString()
+        });
+      } else if (existingMembership.role !== "coach") {
+        repository.updateWorkspaceMemberRole(existingMembership.id, "coach");
+      }
     }
   } else {
     const workspace = getWorkspaceByTeam(account.team);
@@ -198,4 +215,18 @@ export function getSession(token: string): SessionData | undefined {
 
 export function clearSession(token: string): void {
   sessions.delete(token);
+}
+
+export function getAccountByUserId(userId: string): Account | undefined {
+  ensureDemoAccounts();
+  return [...accountsByEmail.values()].find((account) => account.userId === userId);
+}
+
+export function getAccountByCalendarToken(calendarToken: string): Account | undefined {
+  ensureDemoAccounts();
+  return [...accountsByEmail.values()].find((account) => account.calendarToken === calendarToken);
+}
+
+export function getCalendarTokenByUserId(userId: string): string | undefined {
+  return getAccountByUserId(userId)?.calendarToken;
 }

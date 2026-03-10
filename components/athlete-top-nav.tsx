@@ -15,6 +15,10 @@ export function AthleteTopNav({ locale }: { locale: string }) {
     {
       href: `/${locale}/athlete/team-metrics`,
       label: isHebrew ? "מדדי קבוצה" : "Team Metrics"
+    },
+    {
+      href: `/${locale}/athlete/calendar`,
+      label: isHebrew ? "לוח שנה" : "Calendar"
     }
   ];
 

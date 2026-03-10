@@ -1,4 +1,5 @@
 import {
+  CalendarEvent,
   CoachFeedback,
   DashboardSummary,
   ProgressUpdate,
@@ -18,6 +19,7 @@ class InMemoryRepository implements Repository {
   private assignments = new Map<string, TaskAssignment>();
   private updates = new Map<string, ProgressUpdate>();
   private feedback = new Map<string, CoachFeedback>();
+  private calendarEvents = new Map<string, CalendarEvent>();
 
   upsertUser(user: User): User {
     this.users.set(user.id, user);
@@ -135,6 +137,29 @@ class InMemoryRepository implements Repository {
       .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   }
 
+  createCalendarEvent(event: CalendarEvent): CalendarEvent {
+    this.calendarEvents.set(event.id, event);
+    return event;
+  }
+
+  updateCalendarEvent(eventId: string, partial: Partial<CalendarEvent>): CalendarEvent | undefined {
+    const current = this.calendarEvents.get(eventId);
+    if (!current) return undefined;
+    const updated = { ...current, ...partial };
+    this.calendarEvents.set(eventId, updated);
+    return updated;
+  }
+
+  getCalendarEvent(eventId: string): CalendarEvent | undefined {
+    return this.calendarEvents.get(eventId);
+  }
+
+  listCalendarEvents(workspaceId: string): CalendarEvent[] {
+    return [...this.calendarEvents.values()]
+      .filter((event) => event.workspaceId === workspaceId)
+      .sort((a, b) => a.startAt.localeCompare(b.startAt));
+  }
+
   getDashboardSummary(workspaceId: string, nowIso: string): DashboardSummary {
     const tasks = this.listTasks(workspaceId);
     const taskIds = new Set(tasks.map((task) => task.id));
@@ -185,6 +210,7 @@ class InMemoryRepository implements Repository {
     this.assignments.clear();
     this.updates.clear();
     this.feedback.clear();
+    this.calendarEvents.clear();
   }
 }
 

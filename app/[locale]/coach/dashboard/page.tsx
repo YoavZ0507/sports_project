@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ensureDemoData, getPrimaryWorkspaceId } from "@/lib/demoData";
+import { getPrimaryCoachWorkspaceId } from "@/lib/workspaceAccess";
 import { ProgressBarChart } from "@/components/progress-bar-chart";
 import { requireRole } from "@/lib/auth";
 import { repository } from "@/lib/repositories/inMemoryRepository";
@@ -16,7 +17,7 @@ export default async function CoachDashboard({ params }: { params: Promise<{ loc
   const session = await requireRole(locale, "coach");
   const isHebrew = locale === "he";
   const workspaceId =
-    repository.listWorkspaces().find((workspace) => workspace.coachId === session.userId)?.id ??
+    getPrimaryCoachWorkspaceId(session.userId) ??
     getPrimaryWorkspaceId();
 
   const athletes = listMembers(workspaceId).filter((member) => member.role === "athlete");
@@ -89,6 +90,11 @@ export default async function CoachDashboard({ params }: { params: Promise<{ loc
             <Link className="panel-link-card" href={`/${locale}/coach/tasks`}>
               <h3>{isHebrew ? "הוספת משימה" : "Add Task"}</h3>
               <p>{isHebrew ? "יצירה והקצאה של משימות לשחקנים." : "Create and assign tasks to players."}</p>
+            </Link>
+
+            <Link className="panel-link-card" href={`/${locale}/coach/calendar`}>
+              <h3>{isHebrew ? "עדכון לוח שנה" : "Update Team Calendar"}</h3>
+              <p>{isHebrew ? "הוספת אימונים, משחקים ואירועים מיוחדים ללוז." : "Add trainings, games, and special events to the schedule."}</p>
             </Link>
 
             <Link className="panel-link-card" href={`/${locale}/coach/team-insights`}>
