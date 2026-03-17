@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { requireRole } from "@/lib/auth";
 
@@ -6,7 +7,7 @@ export default async function CoachLayout({
   children
 }: {
   params: Promise<{ locale: string }>;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const { locale } = await params;
   await requireRole(locale, "coach");

@@ -189,6 +189,19 @@ ul {
   outline-offset: 2px;
 }
 
+.button-reset {
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.button-reset:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .role-card-coach:hover,
 .role-card-coach:focus-visible {
   box-shadow: 0 16px 36px rgba(23, 120, 93, 0.24);

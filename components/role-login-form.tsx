@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export function RoleLoginForm({ locale, role }: { locale: string; role: "coach" | "athlete" }) {
@@ -14,7 +15,7 @@ export function RoleLoginForm({ locale, role }: { locale: string; role: "coach" 
 
   const registerHref = useMemo(() => `/${locale}/register?role=${role}`, [locale, role]);
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setLoading(true);

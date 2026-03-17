@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DemoAccessPanel } from "@/components/demo-access-panel";
 import { RoleLoginForm } from "@/components/role-login-form";
 
 export default async function AuthPage({
@@ -15,6 +16,8 @@ export default async function AuthPage({
 
   return (
     <section className="landing">
+      <DemoAccessPanel locale={locale} />
+
       <div className="role-grid">
         <Link className={`role-card ${selectedRole === "coach" ? "role-card-active" : ""}`} href={`/${locale}/auth?role=coach`}>
           <h3>{isHebrew ? "מאמן" : "Coach"}</h3>

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { getDictionary, getDirection } from "@/lib/i18n/dictionaries";
 
@@ -6,7 +7,7 @@ export default async function LocaleLayout({
   children
 }: {
   params: Promise<{ locale: string }>;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const { locale } = await params;
   const t = getDictionary(locale);

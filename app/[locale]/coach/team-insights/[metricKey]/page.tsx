@@ -16,9 +16,11 @@ export default async function MetricScoresPage({
   const session = await requireRole(locale, "coach");
   const isHebrew = locale === "he";
 
-  const workspaceId =
-    getPrimaryCoachWorkspaceId(session.userId) ??
-    getPrimaryWorkspaceId();
+  const workspaceId = getPrimaryCoachWorkspaceId(session.userId) ?? getPrimaryWorkspaceId();
+  if (!workspaceId) {
+    notFound();
+  }
+
   const metrics = getMetricSummaries(workspaceId);
   const decodedMetricKey = decodeURIComponent(metricKey);
   const metric = metrics.find((entry) => entry.key === decodedMetricKey);

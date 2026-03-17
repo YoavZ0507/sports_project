@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import type { DragEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Task, TaskResource } from "@/lib/types";
 
@@ -69,12 +70,12 @@ export function CoachTaskBuilder({
     setResources((prev) => [...prev, ...built]);
   }
 
-  async function onDrop(event: React.DragEvent<HTMLDivElement>) {
+  async function onDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
     await addFiles(event.dataTransfer.files);
   }
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setLoading(true);

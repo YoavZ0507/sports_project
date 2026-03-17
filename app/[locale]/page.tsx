@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DemoAccessPanel } from "@/components/demo-access-panel";
 
 export default async function LocaleHome({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -14,6 +15,8 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
             : "Before you start, choose whether you are a coach or a player and continue to sign-in."}
         </p>
       </div>
+
+      <DemoAccessPanel locale={locale} />
 
       <div className="role-grid">
         <Link className="role-card role-card-coach" href={`/${locale}/auth?role=coach`}>
@@ -36,14 +39,6 @@ export default async function LocaleHome({ params }: { params: Promise<{ locale:
         </p>
       </Link>
 
-      <Link className="panel-link-card" href={`/${locale}/auth?role=coach`}>
-        <h3>{isHebrew ? "בדיקת מערכת מהירה" : "Quick System Test"}</h3>
-        <p>
-          {isHebrew
-            ? "כניסה למסך ההתחברות ושימוש בכפתור \"כניסה לבדיקת מערכת\"."
-            : "Open sign-in and use the \"System Test Login\" option."}
-        </p>
-      </Link>
     </section>
   );
 }

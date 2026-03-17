@@ -42,9 +42,18 @@ export default async function TeamInsightsPage({ params }: { params: Promise<{ l
   const session = await requireRole(locale, "coach");
   const isHebrew = locale === "he";
 
-  const workspaceId =
-    getPrimaryCoachWorkspaceId(session.userId) ??
-    getPrimaryWorkspaceId();
+  const workspaceId = getPrimaryCoachWorkspaceId(session.userId) ?? getPrimaryWorkspaceId();
+  if (!workspaceId) {
+    return (
+      <section className="team-insights-layout">
+        <section className="card">
+          <h2>{isHebrew ? "נתונים מתקדמים" : "Advanced Insights"}</h2>
+          <p>{isHebrew ? "לא נמצאה קבוצה להצגת מדדים." : "No team workspace was found for advanced insights."}</p>
+        </section>
+      </section>
+    );
+  }
+
   const metrics = getMetricSummaries(workspaceId);
   const metricsWithDistribution = metrics.map((metric) => {
     const distribution = buildDistributionRanges(metric.scores.map((entry) => entry.average));
