@@ -25,6 +25,9 @@ export default async function CoachLayout({
         <Link className="rect-nav-link" href={`/${locale}/coach/team-insights`}>
           {isHebrew ? "נתונים מתקדמים" : "Advanced Insights"}
         </Link>
+        <Link className="rect-nav-link" href={`/${locale}/coach/data-backbone`}>
+          {isHebrew ? "שכבת נתונים" : "Data Backbone"}
+        </Link>
         <Link className="rect-nav-link" href={`/${locale}/coach/calendar`}>
           {isHebrew ? "לוח שנה" : "Calendar"}
         </Link>

@@ -1,10 +1,19 @@
 import {
+  Club,
   CalendarEvent,
+  EventParticipant,
+  GenericEvent,
+  GenericEventType,
+  League,
   CoachFeedback,
   DashboardSummary,
   ProgressUpdate,
+  Season,
+  Sport,
   Task,
   TaskAssignment,
+  Team,
+  TeamMembership,
   User,
   Workspace,
   WorkspaceMember
@@ -14,6 +23,15 @@ import type { Repository } from "@/lib/repositories/interface";
 class InMemoryRepository implements Repository {
   private users = new Map<string, User>();
   private workspaces = new Map<string, Workspace>();
+  private sports = new Map<string, Sport>();
+  private clubs = new Map<string, Club>();
+  private leagues = new Map<string, League>();
+  private seasons = new Map<string, Season>();
+  private teams = new Map<string, Team>();
+  private teamMemberships = new Map<string, TeamMembership>();
+  private genericEventTypes = new Map<string, GenericEventType>();
+  private genericEvents = new Map<string, GenericEvent>();
+  private eventParticipants = new Map<string, EventParticipant>();
   private members = new Map<string, WorkspaceMember>();
   private tasks = new Map<string, Task>();
   private assignments = new Map<string, TaskAssignment>();
@@ -41,6 +59,119 @@ class InMemoryRepository implements Repository {
 
   listWorkspaces(): Workspace[] {
     return [...this.workspaces.values()];
+  }
+
+  upsertSport(sport: Sport): Sport {
+    this.sports.set(sport.id, sport);
+    return sport;
+  }
+
+  getSport(sportId: string): Sport | undefined {
+    return this.sports.get(sportId);
+  }
+
+  listSports(): Sport[] {
+    return [...this.sports.values()];
+  }
+
+  upsertClub(club: Club): Club {
+    this.clubs.set(club.id, club);
+    return club;
+  }
+
+  getClub(clubId: string): Club | undefined {
+    return this.clubs.get(clubId);
+  }
+
+  listClubs(): Club[] {
+    return [...this.clubs.values()];
+  }
+
+  upsertLeague(league: League): League {
+    this.leagues.set(league.id, league);
+    return league;
+  }
+
+  getLeague(leagueId: string): League | undefined {
+    return this.leagues.get(leagueId);
+  }
+
+  listLeagues(): League[] {
+    return [...this.leagues.values()];
+  }
+
+  upsertSeason(season: Season): Season {
+    this.seasons.set(season.id, season);
+    return season;
+  }
+
+  getSeason(seasonId: string): Season | undefined {
+    return this.seasons.get(seasonId);
+  }
+
+  listSeasons(): Season[] {
+    return [...this.seasons.values()];
+  }
+
+  upsertTeam(team: Team): Team {
+    this.teams.set(team.id, team);
+    return team;
+  }
+
+  getTeam(teamId: string): Team | undefined {
+    return this.teams.get(teamId);
+  }
+
+  listTeams(): Team[] {
+    return [...this.teams.values()];
+  }
+
+  upsertTeamMembership(membership: TeamMembership): TeamMembership {
+    this.teamMemberships.set(membership.id, membership);
+    return membership;
+  }
+
+  getTeamMembership(teamId: string, userId: string): TeamMembership | undefined {
+    return [...this.teamMemberships.values()].find((membership) => membership.teamId === teamId && membership.userId === userId);
+  }
+
+  listTeamMemberships(teamId: string): TeamMembership[] {
+    return [...this.teamMemberships.values()].filter((membership) => membership.teamId === teamId);
+  }
+
+  upsertGenericEventType(eventType: GenericEventType): GenericEventType {
+    this.genericEventTypes.set(eventType.id, eventType);
+    return eventType;
+  }
+
+  getGenericEventType(eventTypeId: string): GenericEventType | undefined {
+    return this.genericEventTypes.get(eventTypeId);
+  }
+
+  listGenericEventTypes(): GenericEventType[] {
+    return [...this.genericEventTypes.values()];
+  }
+
+  upsertGenericEvent(event: GenericEvent): GenericEvent {
+    this.genericEvents.set(event.id, event);
+    return event;
+  }
+
+  getGenericEvent(eventId: string): GenericEvent | undefined {
+    return this.genericEvents.get(eventId);
+  }
+
+  listGenericEvents(teamId: string): GenericEvent[] {
+    return [...this.genericEvents.values()].filter((event) => event.teamId === teamId);
+  }
+
+  upsertEventParticipant(participant: EventParticipant): EventParticipant {
+    this.eventParticipants.set(participant.id, participant);
+    return participant;
+  }
+
+  listEventParticipants(eventId: string): EventParticipant[] {
+    return [...this.eventParticipants.values()].filter((participant) => participant.eventId === eventId);
   }
 
   createWorkspaceMember(member: WorkspaceMember): WorkspaceMember {
@@ -205,6 +336,15 @@ class InMemoryRepository implements Repository {
   reset(): void {
     this.users.clear();
     this.workspaces.clear();
+    this.sports.clear();
+    this.clubs.clear();
+    this.leagues.clear();
+    this.seasons.clear();
+    this.teams.clear();
+    this.teamMemberships.clear();
+    this.genericEventTypes.clear();
+    this.genericEvents.clear();
+    this.eventParticipants.clear();
     this.members.clear();
     this.tasks.clear();
     this.assignments.clear();

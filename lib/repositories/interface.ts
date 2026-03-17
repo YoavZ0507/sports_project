@@ -1,10 +1,19 @@
 import {
+  Club,
   CoachFeedback,
   CalendarEvent,
   DashboardSummary,
+  EventParticipant,
+  GenericEvent,
+  GenericEventType,
+  League,
   ProgressUpdate,
+  Season,
+  Sport,
   Task,
   TaskAssignment,
+  Team,
+  TeamMembership,
   User,
   Workspace,
   WorkspaceMember
@@ -17,6 +26,41 @@ export interface Repository {
   createWorkspace(workspace: Workspace): Workspace;
   getWorkspace(workspaceId: string): Workspace | undefined;
   listWorkspaces(): Workspace[];
+
+  upsertSport(sport: Sport): Sport;
+  getSport(sportId: string): Sport | undefined;
+  listSports(): Sport[];
+
+  upsertClub(club: Club): Club;
+  getClub(clubId: string): Club | undefined;
+  listClubs(): Club[];
+
+  upsertLeague(league: League): League;
+  getLeague(leagueId: string): League | undefined;
+  listLeagues(): League[];
+
+  upsertSeason(season: Season): Season;
+  getSeason(seasonId: string): Season | undefined;
+  listSeasons(): Season[];
+
+  upsertTeam(team: Team): Team;
+  getTeam(teamId: string): Team | undefined;
+  listTeams(): Team[];
+
+  upsertTeamMembership(membership: TeamMembership): TeamMembership;
+  getTeamMembership(teamId: string, userId: string): TeamMembership | undefined;
+  listTeamMemberships(teamId: string): TeamMembership[];
+
+  upsertGenericEventType(eventType: GenericEventType): GenericEventType;
+  getGenericEventType(eventTypeId: string): GenericEventType | undefined;
+  listGenericEventTypes(): GenericEventType[];
+
+  upsertGenericEvent(event: GenericEvent): GenericEvent;
+  getGenericEvent(eventId: string): GenericEvent | undefined;
+  listGenericEvents(teamId: string): GenericEvent[];
+
+  upsertEventParticipant(participant: EventParticipant): EventParticipant;
+  listEventParticipants(eventId: string): EventParticipant[];
 
   createWorkspaceMember(member: WorkspaceMember): WorkspaceMember;
   updateWorkspaceMemberRole(memberId: string, role: WorkspaceMember["role"]): WorkspaceMember | undefined;

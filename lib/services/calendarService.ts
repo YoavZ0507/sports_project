@@ -1,5 +1,6 @@
 import { createId } from "@/lib/ids";
 import { repository } from "@/lib/repositories/inMemoryRepository";
+import { syncCalendarEventToBackbone } from "@/lib/services/backboneSyncService";
 import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 import type { CalendarEvent } from "@/lib/types";
 
@@ -32,7 +33,9 @@ export function createCalendarEvent(input: {
     updatedAt: new Date().toISOString()
   };
 
-  return repository.createCalendarEvent(event);
+  const created = repository.createCalendarEvent(event);
+  syncCalendarEventToBackbone(created);
+  return created;
 }
 
 export function updateCalendarEvent(input: {
@@ -54,6 +57,7 @@ export function updateCalendarEvent(input: {
   });
 
   if (!updated) throw new Error("event not found");
+  syncCalendarEventToBackbone(updated);
   return updated;
 }
 

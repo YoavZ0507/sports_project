@@ -1,6 +1,7 @@
 import { createId } from "@/lib/ids";
 import { requireCoach } from "@/lib/permissions";
 import { repository } from "@/lib/repositories/inMemoryRepository";
+import { syncWorkspaceMemberToBackbone, syncWorkspaceToBackbone } from "@/lib/services/backboneSyncService";
 import { isCoachInWorkspace } from "@/lib/workspaceAccess";
 import type { Workspace, WorkspaceMember } from "@/lib/types";
 
@@ -14,6 +15,7 @@ export function createWorkspace(input: { coachId: string; coachRole: "coach" | "
     createdAt: new Date().toISOString()
   };
   repository.createWorkspace(workspace);
+  syncWorkspaceToBackbone(workspace);
 
   const coachMembership: WorkspaceMember = {
     id: createId("member"),
@@ -23,6 +25,7 @@ export function createWorkspace(input: { coachId: string; coachRole: "coach" | "
     createdAt: new Date().toISOString()
   };
   repository.createWorkspaceMember(coachMembership);
+  syncWorkspaceMemberToBackbone(coachMembership);
 
   return workspace;
 }
@@ -54,6 +57,7 @@ export function approveAthlete(input: {
 
   const updated = repository.updateWorkspaceMemberRole(input.memberId, "athlete");
   if (!updated) throw new Error("member not found");
+  syncWorkspaceMemberToBackbone(updated);
   return updated;
 }
 

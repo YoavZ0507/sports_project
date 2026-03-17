@@ -3,6 +3,10 @@ create type membership_role as enum ('coach', 'athlete', 'pending');
 create type assignment_status as enum ('not_started', 'in_progress', 'completed', 'blocked');
 create type schedule_type as enum ('one_time', 'recurring');
 create type calendar_event_type as enum ('training', 'game', 'special');
+create type generic_event_status as enum ('planned', 'completed', 'cancelled');
+create type team_membership_role as enum ('coach', 'athlete');
+create type event_participant_role as enum ('player', 'coach', 'staff');
+create type attendance_status as enum ('planned', 'present', 'absent', 'late', 'excused');
 
 create table if not exists users (
   id uuid primary key,
@@ -26,6 +30,58 @@ create table if not exists workspace_members (
   role membership_role not null,
   created_at timestamptz not null default now(),
   unique (workspace_id, user_id)
+);
+
+create table if not exists sports (
+  id text primary key,
+  key text unique not null,
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists clubs (
+  id text primary key,
+  sport_id text not null references sports(id),
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists leagues (
+  id text primary key,
+  sport_id text not null references sports(id),
+  name text not null,
+  level text not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists seasons (
+  id text primary key,
+  label text not null,
+  start_date date not null,
+  end_date date not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists teams (
+  id text primary key,
+  sport_id text not null references sports(id),
+  club_id text not null references clubs(id),
+  league_id text not null references leagues(id),
+  season_id text not null references seasons(id),
+  workspace_id uuid unique not null references workspaces(id) on delete cascade,
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists team_memberships (
+  id text primary key,
+  team_id text not null references teams(id) on delete cascade,
+  club_id text not null references clubs(id) on delete cascade,
+  user_id uuid not null references users(id) on delete cascade,
+  role team_membership_role not null,
+  source_workspace_member_id uuid unique not null references workspace_members(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (team_id, user_id)
 );
 
 create table if not exists tasks (
@@ -92,4 +148,41 @@ create table if not exists calendar_events (
   created_by uuid not null references users(id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
+);
+
+create table if not exists generic_event_types (
+  id text primary key,
+  key text unique not null,
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists generic_events (
+  id text primary key,
+  source_calendar_event_id uuid unique not null references calendar_events(id) on delete cascade,
+  event_type_id text not null references generic_event_types(id),
+  sport_id text not null references sports(id),
+  club_id text not null references clubs(id),
+  team_id text not null references teams(id) on delete cascade,
+  season_id text not null references seasons(id),
+  title text not null,
+  description text,
+  start_at timestamptz not null,
+  end_at timestamptz not null,
+  location text,
+  status generic_event_status not null default 'planned',
+  created_by uuid not null references users(id),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists event_participants (
+  id text primary key,
+  event_id text not null references generic_events(id) on delete cascade,
+  user_id uuid not null references users(id) on delete cascade,
+  participant_role event_participant_role not null,
+  attendance_status attendance_status not null default 'planned',
+  source_workspace_member_id uuid references workspace_members(id) on delete set null,
+  created_at timestamptz not null default now(),
+  unique (event_id, user_id)
 );

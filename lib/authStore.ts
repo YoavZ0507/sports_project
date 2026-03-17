@@ -2,6 +2,7 @@ import { createId } from "@/lib/ids";
 import { repository } from "@/lib/repositories/inMemoryRepository";
 import { TEAMS, type TeamName } from "@/lib/teams";
 import { createSessionToken, hashPassword, verifyPassword, isEnglishUsername } from "@/lib/security";
+import { syncWorkspaceMemberToBackbone } from "@/lib/services/backboneSyncService";
 import type { Locale, MembershipRole } from "@/lib/types";
 import { createWorkspace, requestToJoinWorkspace } from "@/lib/services/workspaceService";
 
@@ -141,15 +142,19 @@ export function createAccount(input: {
     } else {
       const existingMembership = repository.getWorkspaceMembership(existingTeamWorkspace.id, account.userId);
       if (!existingMembership) {
-        repository.createWorkspaceMember({
+        const createdMembership = repository.createWorkspaceMember({
           id: createId("member"),
           workspaceId: existingTeamWorkspace.id,
           userId: account.userId,
           role: "coach",
           createdAt: new Date().toISOString()
         });
+        syncWorkspaceMemberToBackbone(createdMembership);
       } else if (existingMembership.role !== "coach") {
-        repository.updateWorkspaceMemberRole(existingMembership.id, "coach");
+        const updatedMembership = repository.updateWorkspaceMemberRole(existingMembership.id, "coach");
+        if (updatedMembership) {
+          syncWorkspaceMemberToBackbone(updatedMembership);
+        }
       }
     }
   } else {
